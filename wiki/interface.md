@@ -17,7 +17,7 @@ let myObj = { label: 'size 10 object'}
 printLabel(myObj)
 ```  
 接口 `LabelledValue` 代表了有一个类型为 `string` 的 `label` 属性的对象。  
-需要注意的是，实际上传入的对象可能会包含很多属性，传入多余的属性会报错，因为编译器并非只检查是否包含接口必需的属性以及属性的类型是否正确，详细原因见下方 [额外的属性检查](#额外的属性检查)。  
+需要注意的是，实际上传入的对象可能会包含很多属性，传入多余的属性会报错，因为编译器默认进行额外的属性检查，并非只检查是否包含接口必需的属性以及属性的类型是否正确，详细原因见下方 [额外的属性检查](#额外的属性检查)。  
 
 ## 可选属性
 可选属性的定义就是在属性名字定义后面加上一个 `?` 符号。  
@@ -81,6 +81,14 @@ mySearch = function (src, subStr) {
 }
 ```  
 如上代码所示，可以不指定 `mySearch` 函数的入参、返回值的类型，编译器根据 `mySearch` 的函数类型 `SearchFunc` 自动推断， 并且 `mySearch` 函数的入参名不需要与函数类型 `SearchFunc` 中定义的一致。  
+
+> 上面的例子相当于以下定义变量时指定类型，注意此时使用 `=>` 而不是 `:` ：  
+```ts
+let mySearch: (src: string, subStr: string) => boolean = function (src, subStr) {
+  let result = src.search(subStr)
+  return result > -1
+}
+```
 
 ## 类类型（类实现接口）
 与 `C#`、 `Java` 里的接口基本作用相同，可以使用接口来强制一个类符合某种契约，类使用 `implements` 实现接口。  

@@ -91,7 +91,7 @@ let n: null = null
 ```  
 默认情况下，`null` 和 `undefined` 是**所有类型的子类型**；  
 但是当指定了 `--strictNullChecks` 之后，`undefined` 只能赋给 `void` 和它自身，而 `null` 只能赋给 `null`。这可以避免很多问题。  
-> 推荐尽可能地使用 `--strictNullChecks` 。  
+> 推荐尽可能地使用 `--strictNullChecks` ，此时如果想在某处传入 `string` 或 `null` 或 `undefined`， 可以使用联合类型 `string | null | undefined`。  
 
 ## never类型
 `never` 类型表示那些永不存在的值。  
