@@ -1,0 +1,241 @@
+# 类
+
+- [类](#%e7%b1%bb)
+  - [类的示例](#%e7%b1%bb%e7%9a%84%e7%a4%ba%e4%be%8b)
+  - [类的继承](#%e7%b1%bb%e7%9a%84%e7%bb%a7%e6%89%bf)
+  - [公共、私有、受保护的修饰符](#%e5%85%ac%e5%85%b1%e7%a7%81%e6%9c%89%e5%8f%97%e4%bf%9d%e6%8a%a4%e7%9a%84%e4%bf%ae%e9%a5%b0%e7%ac%a6)
+    - [默认为public](#%e9%bb%98%e8%ae%a4%e4%b8%bapublic)
+    - [理解private](#%e7%90%86%e8%a7%a3private)
+    - [理解protected](#%e7%90%86%e8%a7%a3protected)
+    - [构造函数使用修饰符](#%e6%9e%84%e9%80%a0%e5%87%bd%e6%95%b0%e4%bd%bf%e7%94%a8%e4%bf%ae%e9%a5%b0%e7%ac%a6)
+  - [只读属性readonly](#%e5%8f%aa%e8%af%bb%e5%b1%9e%e6%80%a7readonly)
+  - [参数属性](#%e5%8f%82%e6%95%b0%e5%b1%9e%e6%80%a7)
+  - [存取器getters,setters](#%e5%ad%98%e5%8f%96%e5%99%a8getterssetters)
+  - [抽象类](#%e6%8a%bd%e8%b1%a1%e7%b1%bb)
+
+## 类的示例
+```ts
+class Human {
+  name: string
+  constructor(name: string ){
+    this.name = name
+  }
+  greet():void {
+    console.log(`hello, my name is ${this.name}`)
+  }
+}
+
+let per1 = new Human('yuusha')
+per1.greet()
+```  
+
+## 类的继承
+```ts
+class Animal {
+  name: string
+  constructor(name: string){
+    this.name = name
+  }
+  move(speed: number = 0): void {
+    console.log(`${this.name} moves at speed: ${speed}`)
+  }
+}
+
+class Horse extends Animal {
+  legs: number
+  constructor(name: string, legs: number){
+    super(name)
+    this.legs = legs
+  }
+  move(speed: number = 5): void {
+    console.log('this horse is running...')
+    super.move(speed)
+  }
+}
+
+class Snake extends Animal {
+  length: number
+  constructor(name: string, length: number){
+    super(name)
+    this.length = length
+  }
+  move(speed: number = 3){
+    console.log('this snake is running ...')
+    super.move(speed)
+  }
+}
+
+let horse: Horse = new Horse('HorseName', 4)
+let snake: Animal = new Snake('SnakeName', 1)
+
+horse.move()
+snake.move()
+```  
+
+1. 子类的构造函数必须**首先**调用父类的构造方法： `super()`；  
+2. 可以将变量声明为父类类型，而赋值为子类实例，但是无法使用父类没有的属性和方法（相当于类型断言为父类型）。  
+
+## 公共、私有、受保护的修饰符
+### 默认为public
+TypeScript中成员默认修饰符为 `public` ,也可以显式地声明为`public`。  
+```ts
+class Animal {
+  public name: string
+  public constructor(name: string) {
+    this.name = name
+  }
+  public move(speed: number){
+    console.log(`${this.name} moves at speed ${speed}`)
+  }
+}
+```  
+
+### 理解private
+当成员被标记为 `private`, 则不能在声明它的类的外部访问。  
+```ts
+class Animal {
+  private name: string
+  constructor(name: string) {
+    this.name = name
+  }
+}
+
+new Animal('a').name  // Error
+```  
+
+### 理解protected
+`protected`与`private`类似，但是可以在子类中访问。  
+
+```ts
+class Animal {
+  protected name: string
+  constructor(name: string) {
+    this.name = name
+  }
+}
+
+class Dog extends Animal {
+  constructor(name: string){
+    super(name)
+  }
+
+  showName(): void {
+    console.log(this.name)
+  }
+}
+
+new Dog('doggy').showName()
+```
+
+### 构造函数使用修饰符
+构造函数也可以定义为 `protected` 或 `private` 类型，此时无法在类外部使用构造函数创建该类的实例。  
+典型应用是 `Singleton` 模式：  
+```ts
+class EagerSingleton {
+  private static instance: EagerSingleton = new EagerSingleton()
+  public data: any
+  private constructor() { }
+  public static getInstance(){
+    return EagerSingleton.instance
+  }
+}
+
+const instance1 = EagerSingleton.getInstance()
+const instance2 = EagerSingleton.getInstance()
+instance1.data = 123
+console.log(instance1.data)  // 123
+instance2.data = 456
+console.log(instance1.data)  // 456
+```  
+
+## 只读属性readonly
+可以使用 `readonly` 关键字将属性设置为只读的（类似于其他语言中的 `final` 关键字）。  
+只读属性只能在声明时或者构造函数里初始化。  
+
+```ts
+class Circle {
+  readonly PI: number
+  radius: number
+  constructor(pi: number, radius: number){
+    this.PI = pi
+    this.radius = radius
+  }
+  getSquare():number {
+    return this.PI * this.radius * this.radius
+  }
+}
+
+const circle = new Circle(3.14, 20)
+console.log(circle.getSquare())
+circle.radius = 25
+console.log(circle.getSquare())
+// circle.PI = 3.1415926  // Error, readonly
+```  
+
+## 参数属性
+参数属性通过给构造函数的参数添加一个访问限定符来声明，可以将属性的创建和初始化在构造函数中完成。  
+```ts
+class Animal {
+	
+	constructor(private name: string) { }
+}
+```  
+
+## 存取器getters,setters
+`typescript` 支持使用  `getters/setters` 来控制对于对象成员的访问。  
+
+```ts
+class Demo {
+	private _name: string
+	
+	set name(name: string){
+		this._name = name
+	}
+	
+	get name(): string {
+		return this._name
+	}
+```
+
+> 只有 `get` 而没有 `set` 的属性自动被推断为 `readonly` 属性。  
+
+## 抽象类
+抽象类作为基类供其他派生类继承， 一般不会直接实例化。使用 `abstract` 关键字定义抽象类和在抽象类中定义抽象方法。  
+
+1. 不同于接口，抽象类可以包含成员的具体实现；  
+2. 抽象类的抽象方法必须在子类中实现；  
+3. 抽象类的抽象方法可以包含访问修饰符，而接口的方法签名都是 `public`。  
+
+
+```ts
+// 抽象类
+abstract class Animal{
+	constructor(protected _name: string){}
+	
+	abstract speak(): void
+	
+	move(): void {
+		console.log(this._name + 'is moving')
+	}
+}
+
+class Dog extends Animal {
+	speak(): void {
+		console.log(this._name + ' is barking')
+	}
+	
+	eat(): void {
+		console.log(`${this._name} is eating`)
+	}
+}
+
+// let jim: Dog = new Dog('Jim')
+let jim: Animal = new Dog('Jim')  // 可以定义为基类类型
+jim.speak()
+jim.move()
+// jim.eat()  // Error, 定义为Animal类型，所以没有eat（）方法
+```  
+
+
+
+
