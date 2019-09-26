@@ -60,24 +60,25 @@ let printNumber: ((a: number, ...rest: number[]) => void) | null = printNum
 printNumber = null
 
 // This 
-// let person = {
-	// age: 12,
-	// printAge: function (){
-		// return function (){
-			// console.log(this.age)
-		// }
-	// }
-// }
+let person = {
+	age: 12,
+	printAge: function (){
+		return () => {
+			console.log(this.age)
+		}
+	}
+}
 
-// person.printAge()
+person.printAge()
 
+// this作为参数
 interface UseThisDemo {
 	name: string
 	age: number
 	printInfo: (this: UseThisDemo) => void
 }
 
-let person: UseThisDemo = {
+let per: UseThisDemo = {
 	name: 'yuusha',
 	age: 24,
 	printInfo: function (this: UseThisDemo){
@@ -85,10 +86,23 @@ let person: UseThisDemo = {
 	}
 }
 
-person.printInfo()
-// let foo = person.printInfo
-// foo()  // Error
-let foo = person.printInfo.bind({name: 'xyz', age: 123, printInfo(){}})
-foo()  // OK, `this` refers to an  `UseThisDemo` object
+per.printInfo()
+// let foo = per.printInfo
+// foo()  // Error `this` not refer to a `UseThisDemo` object
+let foo = per.printInfo.bind({name: 'xyz', age: 123, printInfo(){}})
+foo()  // OK, `this` refers to a `UseThisDemo` object
 
+// 重载
+function getBirthYear(age: number): number
+function getBirthYear(date: Date): number
+function getBirthYear(x: any){
+	if(typeof x === 'number'){
+		return new Date().getFullYear() - x
+	}
+	if(x instanceof Date){
+		return x.getFullYear()
+	}
+}
 
+console.log(getBirthYear(24))
+console.log(getBirthYear(new Date('1995-10-26')))

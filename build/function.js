@@ -46,15 +46,36 @@ printNum(1);
 printNum(1, 2, 3);
 var printNumber = printNum;
 printNumber = null;
+// This 
 var person = {
+    age: 12,
+    printAge: function () {
+        var _this = this;
+        return function () {
+            console.log(_this.age);
+        };
+    }
+};
+person.printAge();
+var per = {
     name: 'yuusha',
     age: 24,
     printInfo: function () {
         console.log(this.name, this.age);
     }
 };
-person.printInfo();
-// let foo = person.printInfo
-// foo()  // Error
-var foo = person.printInfo.bind({ name: 'xyz', age: 123, printInfo: function () { } });
-foo(); // OK, `this` refers to an  `UseThisDemo` object
+per.printInfo();
+// let foo = per.printInfo
+// foo()  // Error `this` not refer to a `UseThisDemo` object
+var foo = per.printInfo.bind({ name: 'xyz', age: 123, printInfo: function () { } });
+foo(); // OK, `this` refers to a `UseThisDemo` object
+function getBirthYear(x) {
+    if (typeof x === 'number') {
+        return new Date().getFullYear() - x;
+    }
+    if (x instanceof Date) {
+        return x.getFullYear();
+    }
+}
+console.log(getBirthYear(24));
+console.log(getBirthYear(new Date('1995-10-26')));
