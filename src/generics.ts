@@ -9,3 +9,4 @@ function identity<AA>(arg: AA): AA{
 identity(123)
 identity('string')
 identity(true)
+
