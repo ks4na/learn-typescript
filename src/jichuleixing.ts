@@ -29,12 +29,12 @@ let userInfo: [string, number] = ['yuusha', 25]
 // console.log(userInfo)
 
 // enum
-enum Color{
+enum Color {
   Red = 10,
-  Green = 2, 
+  Green = 2,
   Blue = 3
 }
-let c: Color = Color. Green
+let c: Color = Color.Green
 
 // console.log(c)
 
@@ -53,7 +53,7 @@ function printName(name: string): void {
   console.log(name)
 }
 
-// printName('yuusha')  
+// printName('yuusha')
 
 // void类型只能赋给它 null或者undefined，开启 --strictNullChecks 后只能赋值 undefined
 let v: void = undefined
@@ -74,7 +74,9 @@ function error(msg: string): never {
 // 写法1： (<type>val)
 let str: Object = 'this is a string'
 // let strLen: number = str.length  // roperty 'length' does not exist on type 'Object'
-let strLen: number = (<string>str).length  // ok
+let strLen: number = (<string>str).length // ok
 
 // 写法2： (val as type)
 let strLen2: number = (str as string).length
+
+export {}

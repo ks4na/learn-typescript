@@ -126,3 +126,5 @@ console.log(circle.getSquare())
 circle.radius = 25
 console.log(circle.getSquare())
 // circle.PI = 3.1415926  // Error, readonly
+
+export {}

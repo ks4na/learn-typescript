@@ -106,3 +106,5 @@ function getBirthYear(x: any){
 
 console.log(getBirthYear(24))
 console.log(getBirthYear(new Date('1995-10-26')))
+
+export {}
